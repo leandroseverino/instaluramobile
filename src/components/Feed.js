@@ -12,6 +12,10 @@ const width = Dimensions.get('screen').width;
 
 export default class Feed extends Component {
 
+  static navigationOptions = {
+    title: 'Feed',
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -87,6 +91,7 @@ export default class Feed extends Component {
   }
 
   render() {
+    const {navigate} = this.props.navigation;
       return (
       <FlatList style={styles.container}
         data={this.state.fotos}  
