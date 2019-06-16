@@ -5,7 +5,8 @@ import {
   Image,
   FlatList,
   Dimensions,
-  StyleSheet
+  StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
 
 import ComentarioInput from './ComentarioInput';
@@ -33,12 +34,15 @@ export default class Post extends Component {
   }
 
   render() {
-    const { foto, likeUnlikeCallback, addCommentCallback } = this.props;
+    const { foto, likeUnlikeCallback, addCommentCallback, showProfileCallback } = this.props;
     return (
         <View>
-            <View style={styles.containerHeader}>
-              <Image source={{uri: foto.urlPerfil}} style={styles.fotoPerfil} />
-              <Text>{foto.loginUsuario}</Text>
+            <View >
+              <TouchableOpacity style={styles.containerHeader} 
+                onPress={showProfileCallback}>
+                <Image source={{uri: foto.urlPerfil}} style={styles.fotoPerfil} />
+                <Text>{foto.loginUsuario}</Text>
+              </TouchableOpacity>
             </View>
             
             <Image source={{uri: foto.urlFoto}} style={styles.fotoPost}/>

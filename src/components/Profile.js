@@ -1,5 +1,8 @@
 import React, { Component } from "react";
-import { Platform, Dimensions, StyleSheet, FlatList } from "react-native";
+import { Platform,
+         Dimensions,
+         StyleSheet,
+         FlatList, } from "react-native";
 
 import AsyncStorage from "@react-native-community/async-storage";
 
@@ -10,9 +13,9 @@ import Notify from "../api/Notify.ios";
 
 const width = Dimensions.get("screen").width;
 
-export default class Feed extends Component {
+export default class Profile extends Component {
   static navigationOptions = {
-    title: "Instalura Mobile - Feed"
+    title: "Instalura Mobile - Profile"
   };
 
   constructor(props) {
@@ -25,10 +28,17 @@ export default class Feed extends Component {
   }
 
   componentDidMount() {
-    AsyncStorage.getItem("usuario").then(nome => {
-      this.setState({ loggedUser: nome });
-      uri = uri + "/" + nome;
-    });
+    const { navigation } = this.props;
+    const user = navigation.getParam('user', 'NO-ID');
+
+    if (!user) {
+      AsyncStorage.getItem("usuario").then(nome => {
+        this.setState({ loggedUser: nome });
+        uri = uri + "/" + nome;
+      });
+    } else {
+      this.setState({ loggedUser: user });
+    }
 
     ServiceAPI.get("/fotos").then(json => this.setState({ fotos: json }));
   }
@@ -105,13 +115,6 @@ export default class Feed extends Component {
       });;
   }
 
-  showProfile() {
-    this.props.navigation.navigate('Profile', {
-      user: this.state.loggedUser
-    });
-    
-  }
-
   render() {
     const { navigate } = this.props.navigation;
     return (
@@ -123,7 +126,6 @@ export default class Feed extends Component {
             foto={item}
             likeUnlikeCallback={this.likeUnlikeFoto.bind(this)}
             addCommentCallback={this.addComment.bind(this)}
-            showProfileCallback={this.showProfile.bind(this)}
           />
         )}
       />
